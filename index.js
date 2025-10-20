@@ -1,8 +1,8 @@
-import AWS from "aws-sdk";
-
+// Use CommonJS syntax instead of import
+const AWS = require("aws-sdk");
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   console.log("Event:", event);
 
   const headers = {
