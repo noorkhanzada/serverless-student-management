@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serverless Student Management</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #ffffff);
+      padding: 40px;
+      text-align: center;
+      color: #333;
+    }
+
+    h2 {
+      color: #0d47a1;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: #ffffff;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    input {
+      margin: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .buttons {
+      margin-top: 15px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .add { background: #4caf50; }
+    .get { background: #2196f3; }
+    .update { background: #ff9800; }
+    .delete { background: #f44336; }
+
+    table {
+      margin: 25px auto;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #0d47a1;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Serverless Student Management System</h2>
+
+    <input type="text" id="studentId" placeholder="Student ID" /><br />
+    <input type="text" id="name" placeholder="Student Name" /><br />
+    <input type="email" id="email" placeholder="Email Address" /><br />
+
+    <div class="buttons">
+      <button class="add" onclick="addStudent()">Add Student</button>
+      <button class="get" onclick="getStudents()">Get Students</button>
+      <button class="update" onclick="updateStudent()">Update Student</button>
+      <button class="delete" onclick="deleteStudent()">Delete Student</button>
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = "https://dppwecg1k2.execute-api.ap-southeast-1.amazonaws.com/dev/students";
+
+    async function addStudent() {
+      const body = {
+        studentId: document.getElementById("studentId").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+      };
+      await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      alert("✅ Student added successfully!");
+    }
+
+    async function getStudents() {
+      try {
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        // Create table if not exists
+        let table = document.querySelector("#studentTable");
+        if (!table) {
+          table = document.createElement("table");
+          table.id = "studentTable";
+          table.innerHTML = `
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Email</th></tr>
+            </thead>
+            <tbody></tbody>
+          `;
+          document.body.appendChild(table);
+        }
+
+        const tbody = document.querySelector("#studentTable tbody");
+        tbody.innerHTML = "";
+
+        // Fill table rows
+        data.forEach(s => {
+          const row = `<tr><td>${s.studentid}</td><td>${s.name}</td><td>${s.email}</td></tr>`;
+          tbody.innerHTML += row;
+        });
+
+        alert("📋 Students displayed below!");
+      } catch (error) {
+        console.error("Error fetching students:", error);
+        alert("⚠️ Failed to fetch students. Check console for details.");
+      }
+    }
+
+    async function updateStudent() {
+      const body = {
+        studentId: document.getElementById("studentId").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value
+      };
+      await fetch(apiUrl, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      alert("✏️ Student updated successfully!");
+    }
+
+    async function deleteStudent() {
+      const body = { studentId: document.getElementById("studentId").value };
+      await fetch(apiUrl, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      alert("🗑️ Student deleted successfully!");
+    }
+  </script>
+</body>
+</html>
