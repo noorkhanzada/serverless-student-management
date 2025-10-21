@@ -30,7 +30,7 @@ S3 + CloudFront
 
 CodePipeline
 You can read my detailed blog  
-
+https://noorulainkz.hashnode.dev/building-a-serverless-student-management-system-using-aws-lambda-api-gateway-and-dynamodb
 
                       
 
