@@ -17,7 +17,21 @@ Frontend → API Gateway → AWS Lambda → DynamoDB
 User interacts with the UI hosted on S3.
  API Gateway routes requests to Lambda functions.
  Lambda reads/writes data in DynamoDB.
- CloudFront accelerates global delivery of the frontend.                      
+ CloudFront accelerates global delivery of the frontend.  
+ Technologies Used:
+
+AWS Lambda
+
+API Gateway
+
+DynamoDB
+
+S3 + CloudFront
+
+CodePipeline
+You can read my detailed blog  
+
+
                       
 
                       
